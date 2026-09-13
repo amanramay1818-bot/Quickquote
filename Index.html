@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickQuote - Instant Booking</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex justify-center items-center p-4">
+
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <h1 class="text-2xl font-bold text-emerald-600">QuickQuote</h1>
+      <p class="text-xs text-gray-500 mt-1">Select a service, pick a time, and send your request via WhatsApp.</p>
+    </div>
+
+    <!-- Booking Form -->
+    <form id="bookingForm" onsubmit="sendWhatsApp(event)" class="space-y-4">
+      
+      <!-- Customer Name -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Your Full Name</label>
+        <input type="text" id="customerName" required placeholder="e.g., John Doe" 
+               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
+      </div>
+
+      <!-- Service Selection -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Select Service</label>
+        <select id="serviceType" required 
+                class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white">
+          <option value="" disabled selected>Choose a service...</option>
+          <option value="Haircut & Beard Trim">Haircut & Beard Trim</option>
+          <option value="Car Wash & Detailing">Car Wash & Detailing</option>
+          <option value="Plumbing Assessment">Plumbing Repair / Leak Assessment</option>
+          <option value="General Maintenance">General Maintenance</option>
+        </select>
+      </div>
+
+      <!-- Preferred Date & Time -->
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Preferred Date</label>
+          <input type="date" id="bookingDate" required 
+                 class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Preferred Time</label>
+          <input type="time" id="bookingTime" required 
+                 class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
+        </div>
+      </div>
+
+      <!-- Additional Details / Job Description -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Job Details or Address</label>
+        <textarea id="jobDetails" rows="3" placeholder="Briefly describe what you need or enter your location..." 
+                  class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"></textarea>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" 
+              class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg shadow-md transition duration-200 text-sm flex items-center justify-center gap-2">
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+          <path d="M12.031 2c-5.517 0-9.993 4.476-9.993 9.993 0 1.763.459 3.479 1.33 4.996l-1.415 5.166 5.285-1.386c1.462.797 3.116 1.217 4.793 1.217 5.517 0 9.993-4.476 9.993-9.993s-4.476-9.993-9.993-9.993zm0 18.288c-1.5 0-2.97-.404-4.256-1.169l-.305-.181-3.159.828.842-3.08-.198-.315c-.841-1.338-1.286-2.888-1.286-4.479 0-4.57 3.718-8.288 8.288-8.288s8.288 3.718 8.288 8.288-3.718 8.288-8.288 8.288z"/>
+        </svg>
+        Send Booking Request
+      </button>
+
+    </form>
+  </div>
+
+  <script>
+    function sendWhatsApp(event) {
+      event.preventDefault();
+
+      // Enter the target business owner's phone number here (with country code, no + or spaces)
+      const businessPhone = "27810000000"; 
+
+      // Retrieve form values
+      const name = document.getElementById("customerName").value;
+      const service = document.getElementById("serviceType").value;
+      const date = document.getElementById("bookingDate").value;
+      const time = document.getElementById("bookingTime").value;
+      const details = document.getElementById("jobDetails").value || "N/A";
+
+      // Format WhatsApp Message
+      const message = `*NEW BOOKING REQUEST*%0A%0A` +
+                      `*Customer:* ${encodeURIComponent(name)}%0A` +
+                      `*Service:* ${encodeURIComponent(service)}%0A` +
+                      `*Requested Date:* ${encodeURIComponent(date)}%0A` +
+                      `*Requested Time:* ${encodeURIComponent(time)}%0A` +
+                      `*Details:* ${encodeURIComponent(details)}`;
+
+      // Redirect to WhatsApp API
+      const whatsappURL = `https://wa.me/${businessPhone}?text=${message}`;
+      window.open(whatsappURL, "_blank");
+    }
+  </script>
+
+</body>
+</html>
